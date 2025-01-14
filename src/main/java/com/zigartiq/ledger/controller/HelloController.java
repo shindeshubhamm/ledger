@@ -4,12 +4,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.zigartiq.ledger.dto.ApiResponse;
+
 @RestController
 @RequestMapping("/api")
 public class HelloController {
 
     @GetMapping("/hello")
-    public String hello() {
-        return "Welcome to Ledger API!";
+    public ApiResponse<String> hello() {
+        return new ApiResponse<>("Welcome to Ledger API!", "Success");
     }
 }
