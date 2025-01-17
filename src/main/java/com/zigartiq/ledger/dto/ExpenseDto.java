@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -25,6 +26,8 @@ public class ExpenseDto {
     @NotNull
     @Positive
     private BigDecimal amount;
+    @NotNull
+    private OffsetDateTime dateOfTransaction;
     private Date createdAt;
     private Date updatedAt;
     private String description;

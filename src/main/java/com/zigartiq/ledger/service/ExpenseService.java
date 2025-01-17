@@ -31,6 +31,7 @@ public class ExpenseService {
                 expenseDto.getCategory(),
                 expenseDto.getCurrency(),
                 expenseDto.getAmount(),
+                expenseDto.getDateOfTransaction(),
                 expenseDto.getDescription());
 
         Expense savedExpense = expenseRepository.save(expense);
@@ -57,6 +58,7 @@ public class ExpenseService {
                 expense.getCategory(),
                 expense.getCurrency(),
                 expense.getAmount(),
+                expense.getDateOfTransaction(),
                 expense.getCreatedAt(),
                 expense.getUpdatedAt(),
                 expense.getDescription());

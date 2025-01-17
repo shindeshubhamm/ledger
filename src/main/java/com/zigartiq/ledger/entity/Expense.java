@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -37,6 +38,10 @@ public class Expense {
     @Column(nullable = false)
     private BigDecimal amount;
 
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private OffsetDateTime dateOfTransaction;
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -50,13 +55,15 @@ public class Expense {
     @Column
     private String description;
 
-    // Constructor without ID and timestamps for convenience
-    public Expense(User user, String name, String category, String currency, BigDecimal amount, String description) {
+    public Expense(User user, String name, String category, String currency, BigDecimal amount,
+            OffsetDateTime dateOfTransaction,
+            String description) {
         this.user = user;
         this.name = name;
         this.category = category;
         this.currency = currency;
         this.amount = amount;
+        this.dateOfTransaction = dateOfTransaction;
         this.description = description;
     }
 }
