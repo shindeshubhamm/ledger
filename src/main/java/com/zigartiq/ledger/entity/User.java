@@ -7,35 +7,42 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
 
 @Entity
-@Table(name = "expenses")
+@Table(name = "users", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "username"),
+        @UniqueConstraint(columnNames = "email")
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Expense {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(nullable = false, unique = true)
+    private String username;
 
     @Column(nullable = false)
-    private String name;
+    private String email;
 
     @Column(nullable = false)
-    private String category;
+    private String firstName;
+
+    @Column
+    private String lastName;
 
     @Column(nullable = false)
-    private String currency;
+    private String passwordHash;
 
     @Column(nullable = false)
-    private BigDecimal amount;
+    private Boolean isEmailVerified = false;
+
+    @Column
+    private String profileImageUrl;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
@@ -47,16 +54,14 @@ public class Expense {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
 
-    @Column
-    private String description;
-
     // Constructor without ID and timestamps for convenience
-    public Expense(User user, String name, String category, String currency, BigDecimal amount, String description) {
-        this.user = user;
-        this.name = name;
-        this.category = category;
-        this.currency = currency;
-        this.amount = amount;
-        this.description = description;
+    public User(String username, String email, String firstName,
+            String lastName, String passwordHash, String profileImageUrl) {
+        this.username = username;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.passwordHash = passwordHash;
+        this.profileImageUrl = profileImageUrl;
     }
 }
