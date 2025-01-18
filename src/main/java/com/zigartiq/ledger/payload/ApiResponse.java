@@ -1,4 +1,4 @@
-package com.zigartiq.ledger.dto;
+package com.zigartiq.ledger.payload;
 
 public class ApiResponse<T> {
 

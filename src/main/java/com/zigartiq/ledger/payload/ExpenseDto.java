@@ -1,4 +1,4 @@
-package com.zigartiq.ledger.dto;
+package com.zigartiq.ledger.payload;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

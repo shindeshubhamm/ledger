@@ -1,12 +1,15 @@
 package com.zigartiq.ledger.service;
 
-import com.zigartiq.ledger.dto.ExpenseDto;
 import com.zigartiq.ledger.entity.Expense;
 import com.zigartiq.ledger.entity.User;
+import com.zigartiq.ledger.payload.ExpenseDto;
 import com.zigartiq.ledger.repository.ExpenseRepository;
 import com.zigartiq.ledger.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,7 +23,11 @@ public class ExpenseService {
     private final UserRepository userRepository;
 
     public ExpenseDto addExpense(ExpenseDto expenseDto) {
-        String username = "test";
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String username = userDetails.getUsername();
+
+        System.out.println(username);
 
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));

@@ -1,6 +1,6 @@
 package com.zigartiq.ledger.controller;
 
-import com.zigartiq.ledger.dto.ExpenseDto;
+import com.zigartiq.ledger.payload.ExpenseDto;
 import com.zigartiq.ledger.service.ExpenseService;
 
 import lombok.RequiredArgsConstructor;
@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/expenses")
+@RequiredArgsConstructor
 public class ExpenseController {
 
     private final ExpenseService expenseService;
@@ -28,4 +28,5 @@ public class ExpenseController {
         List<ExpenseDto> expenses = expenseService.getCurrentUserExpenses();
         return new ResponseEntity<>(expenses, HttpStatus.OK);
     }
+
 }
