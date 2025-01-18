@@ -3,7 +3,7 @@ package com.zigartiq.ledger.controller;
 import com.zigartiq.ledger.payload.AuthResponseDto;
 import com.zigartiq.ledger.payload.LoginDto;
 import com.zigartiq.ledger.payload.RegisterDto;
-import com.zigartiq.ledger.service.UserService;
+import com.zigartiq.ledger.service.AuthService;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,17 +18,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final UserService userService;
+    private final AuthService authService;
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponseDto> register(@RequestBody RegisterDto registerDto) {
-        AuthResponseDto authResponseDto = userService.register(registerDto);
+        AuthResponseDto authResponseDto = authService.register(registerDto);
         return new ResponseEntity<>(authResponseDto, HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDto> login(@RequestBody LoginDto loginDto) {
-        AuthResponseDto authResponseDto = userService.login(loginDto);
+        AuthResponseDto authResponseDto = authService.login(loginDto);
         return new ResponseEntity<>(authResponseDto, HttpStatus.OK);
     }
 }
