@@ -1,6 +1,6 @@
 package com.zigartiq.ledger.exception;
 
-import com.zigartiq.ledger.payload.ErrorResponse;
+import com.zigartiq.ledger.payload.ApiResponse;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -15,84 +15,82 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
+    // Resource Not Found Exception
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException exception,
+    public ResponseEntity<ApiResponse<Void>> handleResourceNotFoundException(ResourceNotFoundException exception,
             WebRequest webRequest) {
-        ErrorResponse errorResponseDto = new ErrorResponse(new Date(),
-                exception.getMessage(),
+
+        ApiResponse<Void> apiResponse = new ApiResponse<>("fail", exception.getMessage(), null, null,
                 webRequest.getDescription(false));
-        return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
+
+        return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
     }
 
+    // Ledger Api Exception
     @ExceptionHandler(LedgerApiException.class)
-    public ResponseEntity<ErrorResponse> handleLedgerApiException(LedgerApiException exception, WebRequest request) {
+    public ResponseEntity<ApiResponse<Void>> handleLedgerApiException(LedgerApiException exception,
+            WebRequest request) {
 
-        ErrorResponse errorResponseDto = new ErrorResponse(new Date(), exception.getMessage(),
+        ApiResponse<Void> apiResponse = new ApiResponse<>("fail", exception.getMessage(), null, null,
                 request.getDescription(false));
 
-        return new ResponseEntity<>(errorResponseDto, exception.getStatus());
+        return new ResponseEntity<>(apiResponse, exception.getStatus());
     }
 
+    // Global Exception
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGlobalException(Exception exception, WebRequest request) {
+    public ResponseEntity<ApiResponse<Void>> handleGlobalException(Exception exception, WebRequest request) {
 
-        ErrorResponse errorResponseDto = new ErrorResponse(new Date(), exception.getMessage(),
+        ApiResponse<Void> apiResponse = new ApiResponse<>("fail", exception.getMessage(), null, null,
                 request.getDescription(false));
 
-        return new ResponseEntity<>(errorResponseDto, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    // Validation Exception
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception,
             HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 
-        StringBuilder errorMessage = new StringBuilder();
         Map<String, String> errors = new HashMap<>();
 
         exception.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
             String message = error.getDefaultMessage();
             errors.put(fieldName, message);
-
-            if (errorMessage.length() > 0) {
-                errorMessage.append("; ");
-            }
-            errorMessage.append(fieldName).append(": ").append(message);
         });
 
-        ErrorResponse errorResponseDto = new ErrorResponse(new Date(), "Validation Errors",
-                errorMessage.toString());
+        ApiResponse<Void> apiResponse = new ApiResponse<>("fail", "Validation Errors", null, null, errors);
 
-        return new ResponseEntity<>(errorResponseDto, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
     }
 
+    // Access Denied Exception
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException exception,
+    public ResponseEntity<ApiResponse<Void>> handleAccessDeniedException(AccessDeniedException exception,
             WebRequest request) {
 
-        ErrorResponse errorResponseDto = new ErrorResponse(new Date(), exception.getMessage(),
+        ApiResponse<Void> apiResponse = new ApiResponse<>("fail", exception.getMessage(), null, null,
                 request.getDescription(false));
 
-        return new ResponseEntity<>(errorResponseDto, HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(apiResponse, HttpStatus.FORBIDDEN);
     }
 
+    // Bad Credentials Exception
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ErrorResponse> handleBadCredentialsException(
-            BadCredentialsException exception,
+    public ResponseEntity<ApiResponse<Void>> handleBadCredentialsException(BadCredentialsException exception,
             WebRequest request) {
-        ErrorResponse errorResponseDto = new ErrorResponse(
-                new Date(),
-                "Invalid username or password",
+
+        ApiResponse<Void> apiResponse = new ApiResponse<>("fail", "Invalid username or password", null, null,
                 request.getDescription(false));
 
-        return new ResponseEntity<>(errorResponseDto, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(apiResponse, HttpStatus.UNAUTHORIZED);
     }
 
 }
