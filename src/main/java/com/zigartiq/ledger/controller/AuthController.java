@@ -5,6 +5,7 @@ import com.zigartiq.ledger.payload.LoginDto;
 import com.zigartiq.ledger.payload.RegisterDto;
 import com.zigartiq.ledger.service.AuthService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,13 +22,13 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponseDto> register(@RequestBody RegisterDto registerDto) {
+    public ResponseEntity<AuthResponseDto> register(@Valid @RequestBody RegisterDto registerDto) {
         AuthResponseDto authResponseDto = authService.register(registerDto);
         return new ResponseEntity<>(authResponseDto, HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponseDto> login(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<AuthResponseDto> login(@Valid @RequestBody LoginDto loginDto) {
         AuthResponseDto authResponseDto = authService.login(loginDto);
         return new ResponseEntity<>(authResponseDto, HttpStatus.OK);
     }

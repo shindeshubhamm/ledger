@@ -3,6 +3,7 @@ package com.zigartiq.ledger.controller;
 import com.zigartiq.ledger.payload.ExpenseDto;
 import com.zigartiq.ledger.service.ExpenseService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class ExpenseController {
     private final ExpenseService expenseService;
 
     @PostMapping
-    public ResponseEntity<ExpenseDto> addExpense(@RequestBody ExpenseDto expenseDto) {
+    public ResponseEntity<ExpenseDto> addExpense(@Valid @RequestBody ExpenseDto expenseDto) {
         ExpenseDto savedExpense = expenseService.addExpense(expenseDto);
         return new ResponseEntity<>(savedExpense, HttpStatus.CREATED);
     }
