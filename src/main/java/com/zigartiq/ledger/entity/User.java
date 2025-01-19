@@ -45,7 +45,7 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private Boolean isEmailVerified = false;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String profileImageUrl;
 
     @CreationTimestamp

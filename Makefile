@@ -3,10 +3,9 @@
 db:
 	docker run -d -it --rm \
 		--name ledger-db \
-		-e MYSQL_ROOT_PASSWORD=rootpassword \
-		-e MYSQL_DATABASE=ledger \
-		-e MYSQL_USER=ledgeruser \
-		-e MYSQL_PASSWORD=ledgerpass \
-		-p 3307:3306 \
-		-v ./data:/var/lib/mysql \
-		mysql:8.0
+		-e POSTGRES_DB=ledger \
+		-e POSTGRES_USER=ledgeruser \
+		-e POSTGRES_PASSWORD=ledgerpass \
+		-p 5432:5432 \
+		-v ./data:/var/lib/postgresql/data \
+		postgres:15-alpine
