@@ -1,6 +1,7 @@
 package com.zigartiq.ledger.config;
 
 import com.zigartiq.ledger.security.CustomUserDetailsService;
+import com.zigartiq.ledger.security.JWTAuthenticationEntryPoint;
 import com.zigartiq.ledger.security.JWTAuthenticationFilter;
 
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
     private final JWTAuthenticationFilter jwtAuthenticationFilter;
+    private final JWTAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Bean
     static PasswordEncoder passwordEncoder() {
@@ -39,6 +41,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/api/auth/**", "/docs/**").permitAll()
                         .anyRequest().authenticated())
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
