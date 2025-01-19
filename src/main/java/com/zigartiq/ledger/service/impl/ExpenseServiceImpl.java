@@ -1,0 +1,80 @@
+package com.zigartiq.ledger.service.impl;
+
+import com.zigartiq.ledger.entity.Expense;
+import com.zigartiq.ledger.entity.User;
+import com.zigartiq.ledger.payload.ExpenseDto;
+import com.zigartiq.ledger.repository.ExpenseRepository;
+import com.zigartiq.ledger.repository.UserRepository;
+import com.zigartiq.ledger.service.ExpenseService;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+@RequiredArgsConstructor
+public class ExpenseServiceImpl implements ExpenseService {
+
+    private final ExpenseRepository expenseRepository;
+    private final UserRepository userRepository;
+
+    public ExpenseDto addExpense(ExpenseDto expenseDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String username = userDetails.getUsername();
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Expense expense = new Expense(
+                user,
+                expenseDto.getName(),
+                expenseDto.getCategory(),
+                expenseDto.getCurrency(),
+                expenseDto.getAmount(),
+                expenseDto.getDateOfTransaction(),
+                expenseDto.getDescription());
+
+        Expense savedExpense = expenseRepository.save(expense);
+
+        return entityToDto(savedExpense);
+    }
+
+    public List<ExpenseDto> getCurrentUserExpenses() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String username = userDetails.getUsername();
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return expenseRepository.findAll().stream()
+                .filter(expense -> expense.getUser().getId().equals(user.getId()))
+                .map(this::entityToDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<ExpenseDto> getAllExpenses() {
+        return expenseRepository.findAll().stream()
+                .map(this::entityToDto)
+                .collect(Collectors.toList());
+    }
+
+    private ExpenseDto entityToDto(Expense expense) {
+        return new ExpenseDto(
+                expense.getId(),
+                expense.getName(),
+                expense.getCategory(),
+                expense.getCurrency(),
+                expense.getAmount(),
+                expense.getDateOfTransaction(),
+                expense.getCreatedAt(),
+                expense.getUpdatedAt(),
+                expense.getDescription());
+    }
+}
