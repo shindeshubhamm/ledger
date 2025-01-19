@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthResponseDto {
+public class AuthResponse {
     @NotBlank
-    private String token;
+    private String accessToken;
 
     @NotBlank
     private String tokenType;

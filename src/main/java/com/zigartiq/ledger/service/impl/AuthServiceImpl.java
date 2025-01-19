@@ -2,7 +2,7 @@ package com.zigartiq.ledger.service.impl;
 
 import com.zigartiq.ledger.entity.User;
 import com.zigartiq.ledger.exception.LedgerApiException;
-import com.zigartiq.ledger.payload.AuthResponseDto;
+import com.zigartiq.ledger.payload.AuthResponse;
 import com.zigartiq.ledger.payload.LoginDto;
 import com.zigartiq.ledger.payload.RegisterDto;
 import com.zigartiq.ledger.repository.UserRepository;
@@ -33,7 +33,7 @@ public class AuthServiceImpl implements AuthService {
         return jwtService.generateToken(authentication);
     }
 
-    public AuthResponseDto register(RegisterDto registerDto) {
+    public AuthResponse register(RegisterDto registerDto) {
 
         if (userRepository.existsByUsername(registerDto.getUsername())) {
             throw new LedgerApiException(HttpStatus.BAD_REQUEST, "Username already exists");
@@ -57,12 +57,12 @@ public class AuthServiceImpl implements AuthService {
 
         String token = generateToken(registerDto.getUsername(), registerDto.getPassword());
 
-        return new AuthResponseDto(token, "Bearer");
+        return new AuthResponse(token, "Bearer");
     }
 
-    public AuthResponseDto login(LoginDto loginDto) {
+    public AuthResponse login(LoginDto loginDto) {
 
         String token = generateToken(loginDto.getUsernameOrEmail(), loginDto.getPassword());
-        return new AuthResponseDto(token, "Bearer");
+        return new AuthResponse(token, "Bearer");
     }
 }

@@ -1,6 +1,6 @@
 package com.zigartiq.ledger.exception;
 
-import com.zigartiq.ledger.payload.ErrorResponseDto;
+import com.zigartiq.ledger.payload.ErrorResponse;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,27 +23,27 @@ import java.util.Map;
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorResponseDto> handleResourceNotFoundException(ResourceNotFoundException exception,
+    public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException exception,
             WebRequest webRequest) {
-        ErrorResponseDto errorResponseDto = new ErrorResponseDto(new Date(),
+        ErrorResponse errorResponseDto = new ErrorResponse(new Date(),
                 exception.getMessage(),
                 webRequest.getDescription(false));
         return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(LedgerApiException.class)
-    public ResponseEntity<ErrorResponseDto> handleLedgerApiException(LedgerApiException exception, WebRequest request) {
+    public ResponseEntity<ErrorResponse> handleLedgerApiException(LedgerApiException exception, WebRequest request) {
 
-        ErrorResponseDto errorResponseDto = new ErrorResponseDto(new Date(), exception.getMessage(),
+        ErrorResponse errorResponseDto = new ErrorResponse(new Date(), exception.getMessage(),
                 request.getDescription(false));
 
         return new ResponseEntity<>(errorResponseDto, exception.getStatus());
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponseDto> handleGlobalException(Exception exception, WebRequest request) {
+    public ResponseEntity<ErrorResponse> handleGlobalException(Exception exception, WebRequest request) {
 
-        ErrorResponseDto errorResponseDto = new ErrorResponseDto(new Date(), exception.getMessage(),
+        ErrorResponse errorResponseDto = new ErrorResponse(new Date(), exception.getMessage(),
                 request.getDescription(false));
 
         return new ResponseEntity<>(errorResponseDto, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -67,27 +67,27 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             errorMessage.append(fieldName).append(": ").append(message);
         });
 
-        ErrorResponseDto errorResponseDto = new ErrorResponseDto(new Date(), "Validation Errors",
+        ErrorResponse errorResponseDto = new ErrorResponse(new Date(), "Validation Errors",
                 errorMessage.toString());
 
         return new ResponseEntity<>(errorResponseDto, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ErrorResponseDto> handleAccessDeniedException(AccessDeniedException exception,
+    public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException exception,
             WebRequest request) {
 
-        ErrorResponseDto errorResponseDto = new ErrorResponseDto(new Date(), exception.getMessage(),
+        ErrorResponse errorResponseDto = new ErrorResponse(new Date(), exception.getMessage(),
                 request.getDescription(false));
 
         return new ResponseEntity<>(errorResponseDto, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ErrorResponseDto> handleBadCredentialsException(
+    public ResponseEntity<ErrorResponse> handleBadCredentialsException(
             BadCredentialsException exception,
             WebRequest request) {
-        ErrorResponseDto errorResponseDto = new ErrorResponseDto(
+        ErrorResponse errorResponseDto = new ErrorResponse(
                 new Date(),
                 "Invalid username or password",
                 request.getDescription(false));

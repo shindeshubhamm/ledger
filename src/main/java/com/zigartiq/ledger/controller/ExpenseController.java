@@ -1,5 +1,6 @@
 package com.zigartiq.ledger.controller;
 
+import com.zigartiq.ledger.payload.ApiResponse;
 import com.zigartiq.ledger.payload.ExpenseDto;
 import com.zigartiq.ledger.service.ExpenseService;
 
@@ -19,15 +20,18 @@ public class ExpenseController {
     private final ExpenseService expenseService;
 
     @PostMapping
-    public ResponseEntity<ExpenseDto> addExpense(@Valid @RequestBody ExpenseDto expenseDto) {
+    public ResponseEntity<ApiResponse<ExpenseDto>> addExpense(@Valid @RequestBody ExpenseDto expenseDto) {
         ExpenseDto savedExpense = expenseService.addExpense(expenseDto);
-        return new ResponseEntity<>(savedExpense, HttpStatus.CREATED);
+
+        return new ResponseEntity<>(new ApiResponse<>("success", "Expense added successfully", savedExpense),
+                HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<ExpenseDto>> getCurrentUserExpenses() {
+    public ResponseEntity<ApiResponse<List<ExpenseDto>>> getCurrentUserExpenses() {
         List<ExpenseDto> expenses = expenseService.getCurrentUserExpenses();
-        return new ResponseEntity<>(expenses, HttpStatus.OK);
+
+        return new ResponseEntity<>(new ApiResponse<>("success", "", expenses), HttpStatus.OK);
     }
 
 }

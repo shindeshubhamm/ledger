@@ -17,18 +17,26 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ExpenseDto {
     private UUID id;
+
     @NotBlank
     private String name;
+
     @NotBlank
     private String category;
+
     @NotBlank
     private String currency;
+
     @NotNull
     @Positive
     private BigDecimal amount;
+
     @NotNull
     private OffsetDateTime dateOfTransaction;
+
     private Date createdAt;
+
     private Date updatedAt;
+
     private String description;
 }

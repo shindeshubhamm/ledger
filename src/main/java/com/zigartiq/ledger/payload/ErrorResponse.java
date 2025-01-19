@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Data
 @AllArgsConstructor
-public class ErrorResponseDto {
+public class ErrorResponse {
     @NotNull
     private Date timestamp;
     @NotNull
