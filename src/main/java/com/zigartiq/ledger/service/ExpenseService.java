@@ -27,8 +27,6 @@ public class ExpenseService {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String username = userDetails.getUsername();
 
-        System.out.println(username);
-
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -47,13 +45,21 @@ public class ExpenseService {
     }
 
     public List<ExpenseDto> getCurrentUserExpenses() {
-        String username = "test";
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String username = userDetails.getUsername();
 
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         return expenseRepository.findAll().stream()
                 .filter(expense -> expense.getUser().getId().equals(user.getId()))
+                .map(this::entityToDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<ExpenseDto> getAllExpenses() {
+        return expenseRepository.findAll().stream()
                 .map(this::entityToDto)
                 .collect(Collectors.toList());
     }
