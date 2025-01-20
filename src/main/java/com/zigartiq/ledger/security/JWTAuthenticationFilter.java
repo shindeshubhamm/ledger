@@ -44,6 +44,10 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             SecurityContextHolder.clearContext();
+            if (request.getRequestURL().toString().contains("/api/auth")) {
+                filterChain.doFilter(request, response);
+                return;
+            }
             handleAuthenticationError(response, "Please login");
             return;
         }
