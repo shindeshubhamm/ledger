@@ -8,4 +8,4 @@ db:
 		-e POSTGRES_PASSWORD=ledgerpass \
 		-p 5432:5432 \
 		-v ./data:/var/lib/postgresql/data \
-		postgres:15-alpine
+		postgres:16-alpine
