@@ -9,7 +9,7 @@ import lombok.Data;
 public class ApiResponse<T> {
 
     @NotNull
-    private String status;
+    private String status; // success, fail, error
 
     @NotNull
     private String message;

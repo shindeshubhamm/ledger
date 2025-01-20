@@ -2,7 +2,6 @@ package com.zigartiq.ledger.security;
 
 import com.zigartiq.ledger.exception.LedgerApiException;
 
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
 import javax.crypto.SecretKey;
 
 @Service
@@ -47,21 +45,13 @@ public class JWTService {
     }
 
     public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
-    }
-
-    private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
-    }
-
-    private Claims extractAllClaims(String token) {
         return Jwts
                 .parser()
                 .verifyWith(getKey())
                 .build()
                 .parseSignedClaims(token)
-                .getPayload();
+                .getPayload()
+                .getSubject();
     }
 
     public boolean validateToken(String token) {
@@ -73,7 +63,7 @@ public class JWTService {
                     .parseSignedClaims(token);
             return true;
         } catch (Exception e) {
-            throw new LedgerApiException(HttpStatus.UNAUTHORIZED, "Please login again");
+            throw new LedgerApiException(HttpStatus.UNAUTHORIZED, "Session expired");
         }
     }
 }
