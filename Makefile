@@ -1,4 +1,4 @@
-.PHONY: db prod
+.PHONY: db run-prod
 
 db:
 	docker run -d -it --rm \
@@ -10,5 +10,5 @@ db:
 		-v ./data:/var/lib/postgresql/data \
 		postgres:16-alpine
 
-prod:
-	. ./.env && docker compose -f compose.prod.yml up --build
+run-prod:
+	. ./.env && docker compose up --build
