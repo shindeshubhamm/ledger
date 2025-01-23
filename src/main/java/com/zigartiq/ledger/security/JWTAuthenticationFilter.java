@@ -1,6 +1,7 @@
 package com.zigartiq.ledger.security;
 
 import com.zigartiq.ledger.payload.ApiResponse;
+import com.zigartiq.ledger.utils.Constants;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -44,9 +45,11 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             SecurityContextHolder.clearContext();
-            if (request.getRequestURL().toString().contains("/api/auth")) {
-                filterChain.doFilter(request, response);
-                return;
+            for (String urlPattern : Constants.PUBLIC_URL_PATTERNS) {
+                if (request.getRequestURI().matches(urlPattern.replace("**", ".*"))) {
+                    filterChain.doFilter(request, response);
+                    return;
+                }
             }
             handleAuthenticationError(response, "Please login");
             return;

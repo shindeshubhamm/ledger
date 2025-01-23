@@ -3,7 +3,10 @@ package com.zigartiq.ledger.config;
 import com.zigartiq.ledger.security.CustomUserDetailsService;
 import com.zigartiq.ledger.security.JWTAuthenticationEntryPoint;
 import com.zigartiq.ledger.security.JWTAuthenticationFilter;
+import com.zigartiq.ledger.utils.Constants;
 
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +25,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@SecurityScheme(name = "Bearer Token", type = SecuritySchemeType.HTTP, bearerFormat = "JWT", scheme = "bearer")
 public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
@@ -39,7 +43,7 @@ public class SecurityConfig {
         return http
                 .csrf(customizer -> customizer.disable())
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/auth/**", "/docs/**").permitAll()
+                        .requestMatchers(Constants.PUBLIC_URL_PATTERNS).permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

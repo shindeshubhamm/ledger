@@ -4,6 +4,7 @@ import com.zigartiq.ledger.payload.ApiResponse;
 import com.zigartiq.ledger.payload.ExpenseDto;
 import com.zigartiq.ledger.service.ExpenseService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/expenses")
 @RequiredArgsConstructor
+@Tag(name = "Expenses")
 public class ExpenseController {
 
     private final ExpenseService expenseService;
