@@ -1,4 +1,4 @@
-package com.zigartiq.ledger.payload;
+package com.zigartiq.ledger.payload.response;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

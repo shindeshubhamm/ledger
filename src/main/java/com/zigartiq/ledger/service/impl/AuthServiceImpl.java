@@ -2,9 +2,9 @@ package com.zigartiq.ledger.service.impl;
 
 import com.zigartiq.ledger.entity.User;
 import com.zigartiq.ledger.exception.LedgerApiException;
-import com.zigartiq.ledger.payload.AuthResponse;
-import com.zigartiq.ledger.payload.LoginDto;
-import com.zigartiq.ledger.payload.RegisterDto;
+import com.zigartiq.ledger.payload.request.LoginRequest;
+import com.zigartiq.ledger.payload.request.RegisterRequest;
+import com.zigartiq.ledger.payload.response.AuthResponse;
 import com.zigartiq.ledger.repository.UserRepository;
 import com.zigartiq.ledger.security.JWTService;
 import com.zigartiq.ledger.service.AuthService;
@@ -33,36 +33,36 @@ public class AuthServiceImpl implements AuthService {
         return jwtService.generateToken(authentication);
     }
 
-    public AuthResponse register(RegisterDto registerDto) {
+    public AuthResponse register(RegisterRequest registerRequest) {
 
-        if (userRepository.existsByUsername(registerDto.getUsername())) {
+        if (userRepository.existsByUsername(registerRequest.getUsername())) {
             throw new LedgerApiException(HttpStatus.BAD_REQUEST, "Username already exists");
         }
 
-        if (userRepository.existsByEmail(registerDto.getEmail())) {
+        if (userRepository.existsByEmail(registerRequest.getEmail())) {
             throw new LedgerApiException(HttpStatus.BAD_REQUEST, "Email already exists");
         }
 
-        if (!registerDto.getPassword().equals(registerDto.getConfirmPassword())) {
+        if (!registerRequest.getPassword().equals(registerRequest.getConfirmPassword())) {
             throw new LedgerApiException(HttpStatus.BAD_REQUEST, "Passwords do not match");
         }
 
         User user = new User();
-        user.setUsername(registerDto.getUsername());
-        user.setEmail(registerDto.getEmail());
-        user.setFirstName(registerDto.getFirstName());
-        user.setLastName(registerDto.getLastName());
-        user.setPasswordHash(passwordEncoder.encode(registerDto.getPassword()));
+        user.setUsername(registerRequest.getUsername());
+        user.setEmail(registerRequest.getEmail());
+        user.setFirstName(registerRequest.getFirstName());
+        user.setLastName(registerRequest.getLastName());
+        user.setPasswordHash(passwordEncoder.encode(registerRequest.getPassword()));
         userRepository.save(user);
 
-        String token = generateToken(registerDto.getUsername(), registerDto.getPassword());
+        String token = generateToken(registerRequest.getUsername(), registerRequest.getPassword());
 
         return new AuthResponse(token, "Bearer");
     }
 
-    public AuthResponse login(LoginDto loginDto) {
+    public AuthResponse login(LoginRequest loginRequest) {
 
-        String token = generateToken(loginDto.getUsernameOrEmail(), loginDto.getPassword());
+        String token = generateToken(loginRequest.getUsernameOrEmail(), loginRequest.getPassword());
         return new AuthResponse(token, "Bearer");
     }
 }

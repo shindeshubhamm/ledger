@@ -1,7 +1,8 @@
 package com.zigartiq.ledger.controller;
 
 import com.zigartiq.ledger.payload.ApiResponse;
-import com.zigartiq.ledger.payload.ExpenseDto;
+import com.zigartiq.ledger.payload.request.ExpenseRequest;
+import com.zigartiq.ledger.payload.response.ExpenseResponse;
 import com.zigartiq.ledger.service.ExpenseService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,16 +23,16 @@ public class ExpenseController {
     private final ExpenseService expenseService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<ExpenseDto>> addExpense(@Valid @RequestBody ExpenseDto expenseDto) {
-        ExpenseDto savedExpense = expenseService.addExpense(expenseDto);
+    public ResponseEntity<ApiResponse<ExpenseResponse>> addExpense(@Valid @RequestBody ExpenseRequest expenseRequest) {
+        ExpenseResponse savedExpense = expenseService.addExpense(expenseRequest);
 
         return new ResponseEntity<>(new ApiResponse<>("success", "Expense added successfully", savedExpense),
                 HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<ExpenseDto>>> getCurrentUserExpenses() {
-        List<ExpenseDto> expenses = expenseService.getCurrentUserExpenses();
+    public ResponseEntity<ApiResponse<List<ExpenseResponse>>> getCurrentUserExpenses() {
+        List<ExpenseResponse> expenses = expenseService.getCurrentUserExpenses();
 
         return new ResponseEntity<>(new ApiResponse<>("success", "", expenses), HttpStatus.OK);
     }

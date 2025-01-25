@@ -1,13 +1,13 @@
 package com.zigartiq.ledger.service;
 
-import com.zigartiq.ledger.payload.AuthResponse;
-import com.zigartiq.ledger.payload.LoginDto;
-import com.zigartiq.ledger.payload.RegisterDto;
+import com.zigartiq.ledger.payload.request.LoginRequest;
+import com.zigartiq.ledger.payload.request.RegisterRequest;
+import com.zigartiq.ledger.payload.response.AuthResponse;
 
 public interface AuthService {
 
-    public AuthResponse register(RegisterDto registerDto);
+    public AuthResponse register(RegisterRequest registerRequest);
 
-    public AuthResponse login(LoginDto loginDto);
+    public AuthResponse login(LoginRequest loginRequest);
 
 }

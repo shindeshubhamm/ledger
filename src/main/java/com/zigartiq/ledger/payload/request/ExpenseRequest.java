@@ -1,4 +1,4 @@
-package com.zigartiq.ledger.payload;
+package com.zigartiq.ledger.payload.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -9,15 +9,11 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.Date;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ExpenseDto {
-    private UUID id;
-
+public class ExpenseRequest {
     @NotBlank
     private String name;
 
@@ -33,10 +29,6 @@ public class ExpenseDto {
 
     @NotNull
     private OffsetDateTime dateOfTransaction;
-
-    private Date createdAt;
-
-    private Date updatedAt;
 
     private String description;
 }

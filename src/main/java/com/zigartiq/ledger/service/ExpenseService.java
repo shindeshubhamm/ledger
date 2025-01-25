@@ -1,14 +1,14 @@
 package com.zigartiq.ledger.service;
 
-import com.zigartiq.ledger.payload.ExpenseDto;
+import com.zigartiq.ledger.payload.request.ExpenseRequest;
+import com.zigartiq.ledger.payload.response.ExpenseResponse;
 
 import java.util.List;
 
 public interface ExpenseService {
 
-    public ExpenseDto addExpense(ExpenseDto expenseDto);
+    public ExpenseResponse addExpense(ExpenseRequest expenseRequest);
 
-    public List<ExpenseDto> getCurrentUserExpenses();
+    public List<ExpenseResponse> getCurrentUserExpenses();
 
-    public List<ExpenseDto> getAllExpenses();
 }

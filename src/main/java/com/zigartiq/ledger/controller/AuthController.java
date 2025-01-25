@@ -1,9 +1,9 @@
 package com.zigartiq.ledger.controller;
 
 import com.zigartiq.ledger.payload.ApiResponse;
-import com.zigartiq.ledger.payload.AuthResponse;
-import com.zigartiq.ledger.payload.LoginDto;
-import com.zigartiq.ledger.payload.RegisterDto;
+import com.zigartiq.ledger.payload.request.LoginRequest;
+import com.zigartiq.ledger.payload.request.RegisterRequest;
+import com.zigartiq.ledger.payload.response.AuthResponse;
 import com.zigartiq.ledger.service.AuthService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,18 +25,18 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<AuthResponse>> register(@Valid @RequestBody RegisterDto registerDto) {
-        AuthResponse authResponseDto = authService.register(registerDto);
+    public ResponseEntity<ApiResponse<AuthResponse>> register(@Valid @RequestBody RegisterRequest registerRequest) {
+        AuthResponse authResponse = authService.register(registerRequest);
 
-        return new ResponseEntity<>(new ApiResponse<>("success", "Registration successful", authResponseDto),
+        return new ResponseEntity<>(new ApiResponse<>("success", "Registration successful", authResponse),
                 HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<AuthResponse>> login(@Valid @RequestBody LoginDto loginDto) {
-        AuthResponse authResponseDto = authService.login(loginDto);
+    public ResponseEntity<ApiResponse<AuthResponse>> login(@Valid @RequestBody LoginRequest loginRequest) {
+        AuthResponse authResponse = authService.login(loginRequest);
 
-        return new ResponseEntity<>(new ApiResponse<>("success", "", authResponseDto),
+        return new ResponseEntity<>(new ApiResponse<>("success", "", authResponse),
                 HttpStatus.OK);
     }
 }

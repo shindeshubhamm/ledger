@@ -1,4 +1,4 @@
-package com.zigartiq.ledger.payload;
+package com.zigartiq.ledger.payload.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterDto {
+public class RegisterRequest {
     @NotBlank(message = "Username is required")
     @Size(min = 5, max = 20, message = "Username must be between 5 and 20 characters")
     private String username;
