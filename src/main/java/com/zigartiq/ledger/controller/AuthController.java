@@ -1,6 +1,6 @@
 package com.zigartiq.ledger.controller;
 
-import com.zigartiq.ledger.payload.ApiResponse;
+import com.zigartiq.ledger.payload.StandardResponse;
 import com.zigartiq.ledger.payload.request.LoginRequest;
 import com.zigartiq.ledger.payload.request.RegisterRequest;
 import com.zigartiq.ledger.payload.response.AuthResponse;
@@ -19,24 +19,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-@Tag(name = "Authentication")
+@Tag(name = "Authentication", description = "Authentication management APIs")
 public class AuthController {
 
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<AuthResponse>> register(@Valid @RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<StandardResponse<AuthResponse>> register(
+            @Valid @RequestBody RegisterRequest registerRequest) {
         AuthResponse authResponse = authService.register(registerRequest);
 
-        return new ResponseEntity<>(new ApiResponse<>("success", "Registration successful", authResponse),
+        return new ResponseEntity<>(new StandardResponse<>("success", "Registration successful", authResponse),
                 HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<AuthResponse>> login(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<StandardResponse<AuthResponse>> login(@Valid @RequestBody LoginRequest loginRequest) {
         AuthResponse authResponse = authService.login(loginRequest);
 
-        return new ResponseEntity<>(new ApiResponse<>("success", "", authResponse),
+        return new ResponseEntity<>(new StandardResponse<>("success", "Login successful", authResponse),
                 HttpStatus.OK);
     }
 }

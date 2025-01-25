@@ -1,6 +1,6 @@
 package com.zigartiq.ledger.security;
 
-import com.zigartiq.ledger.payload.ApiResponse;
+import com.zigartiq.ledger.payload.StandardResponse;
 import com.zigartiq.ledger.utils.Constants;
 
 import jakarta.servlet.FilterChain;
@@ -31,7 +31,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-        ApiResponse<Object> errorResponse = new ApiResponse<>("fail", errorMessage);
+        StandardResponse<Object> errorResponse = new StandardResponse<>("fail", errorMessage);
         ObjectMapper mapper = new ObjectMapper();
 
         response.getWriter().write(mapper.writeValueAsString(errorResponse));

@@ -36,11 +36,11 @@ public class AuthServiceImpl implements AuthService {
     public AuthResponse register(RegisterRequest registerRequest) {
 
         if (userRepository.existsByUsername(registerRequest.getUsername())) {
-            throw new LedgerApiException(HttpStatus.BAD_REQUEST, "Username already exists");
+            throw new LedgerApiException(HttpStatus.CONFLICT, "Username already exists");
         }
 
         if (userRepository.existsByEmail(registerRequest.getEmail())) {
-            throw new LedgerApiException(HttpStatus.BAD_REQUEST, "Email already exists");
+            throw new LedgerApiException(HttpStatus.CONFLICT, "Email already exists");
         }
 
         if (!registerRequest.getPassword().equals(registerRequest.getConfirmPassword())) {

@@ -1,6 +1,6 @@
 package com.zigartiq.ledger.controller;
 
-import com.zigartiq.ledger.payload.ApiResponse;
+import com.zigartiq.ledger.payload.StandardResponse;
 import com.zigartiq.ledger.payload.request.ExpenseRequest;
 import com.zigartiq.ledger.payload.response.ExpenseResponse;
 import com.zigartiq.ledger.service.ExpenseService;
@@ -17,24 +17,27 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/expenses")
 @RequiredArgsConstructor
-@Tag(name = "Expenses")
+@Tag(name = "Expenses", description = "Expense management APIs")
 public class ExpenseController {
 
     private final ExpenseService expenseService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<ExpenseResponse>> addExpense(@Valid @RequestBody ExpenseRequest expenseRequest) {
+    public ResponseEntity<StandardResponse<ExpenseResponse>> addExpense(
+            @Valid @RequestBody ExpenseRequest expenseRequest) {
+
         ExpenseResponse savedExpense = expenseService.addExpense(expenseRequest);
 
-        return new ResponseEntity<>(new ApiResponse<>("success", "Expense added successfully", savedExpense),
+        return new ResponseEntity<>(new StandardResponse<>("success", "Expense added successfully", savedExpense),
                 HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<ExpenseResponse>>> getCurrentUserExpenses() {
+    public ResponseEntity<StandardResponse<List<ExpenseResponse>>> getCurrentUserExpenses() {
+
         List<ExpenseResponse> expenses = expenseService.getCurrentUserExpenses();
 
-        return new ResponseEntity<>(new ApiResponse<>("success", "", expenses), HttpStatus.OK);
+        return new ResponseEntity<>(new StandardResponse<>("success", "", expenses), HttpStatus.OK);
     }
 
 }
