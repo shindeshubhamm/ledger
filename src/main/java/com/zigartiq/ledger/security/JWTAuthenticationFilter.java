@@ -41,16 +41,17 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
+        for (String urlPattern : Constants.PUBLIC_URL_PATTERNS) {
+            if (request.getRequestURI().matches(urlPattern.replace("**", ".*"))) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+        }
+
         String authHeader = request.getHeader("Authorization");
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             SecurityContextHolder.clearContext();
-            for (String urlPattern : Constants.PUBLIC_URL_PATTERNS) {
-                if (request.getRequestURI().matches(urlPattern.replace("**", ".*"))) {
-                    filterChain.doFilter(request, response);
-                    return;
-                }
-            }
             handleAuthenticationError(response, "Please login");
             return;
         }
