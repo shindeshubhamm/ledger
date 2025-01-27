@@ -9,6 +9,11 @@
       "name": "jwt.expiration-millis",
       "type": "java.lang.String",
       "description": "JWT expiration time in milliseconds"
+    },
+    {
+      "name": "client.urls",
+      "type": "java.lang.String",
+      "description": "Allowed client URLs for CORS"
     }
   ]
 }

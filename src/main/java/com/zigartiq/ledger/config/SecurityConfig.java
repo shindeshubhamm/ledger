@@ -31,6 +31,7 @@ public class SecurityConfig {
     private final CustomUserDetailsService userDetailsService;
     private final JWTAuthenticationFilter jwtAuthenticationFilter;
     private final JWTAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final CorsConfig corsConfig;
 
     @Bean
     static PasswordEncoder passwordEncoder() {
@@ -42,6 +43,7 @@ public class SecurityConfig {
 
         return http
                 .csrf(customizer -> customizer.disable())
+                .cors(customizer -> customizer.configurationSource(corsConfig.corsConfigSource()))
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(Constants.PUBLIC_URL_PATTERNS).permitAll()
                         .anyRequest().authenticated())
