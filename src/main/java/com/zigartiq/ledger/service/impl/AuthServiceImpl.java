@@ -35,23 +35,23 @@ public class AuthServiceImpl implements AuthService {
 
     public AuthResponse register(RegisterRequest registerRequest) {
 
-        if (userRepository.existsByUsername(registerRequest.getUsername())) {
-            throw new LedgerApiException(HttpStatus.CONFLICT, "Username already exists");
-        }
-
-        if (userRepository.existsByEmail(registerRequest.getEmail())) {
-            throw new LedgerApiException(HttpStatus.CONFLICT, "Email already exists");
-        }
-
         if (!registerRequest.getPassword().equals(registerRequest.getConfirmPassword())) {
             throw new LedgerApiException(HttpStatus.BAD_REQUEST, "Passwords do not match");
         }
 
+        if (userRepository.existsByEmail(registerRequest.getEmail().trim())) {
+            throw new LedgerApiException(HttpStatus.CONFLICT, "Email already exists");
+        }
+
+        if (userRepository.existsByUsername(registerRequest.getUsername().trim())) {
+            throw new LedgerApiException(HttpStatus.CONFLICT, "Username already exists");
+        }
+
         User user = new User();
-        user.setUsername(registerRequest.getUsername());
-        user.setEmail(registerRequest.getEmail());
-        user.setFirstName(registerRequest.getFirstName());
-        user.setLastName(registerRequest.getLastName());
+        user.setUsername(registerRequest.getUsername().trim());
+        user.setEmail(registerRequest.getEmail().trim());
+        user.setFirstName(registerRequest.getFirstName().trim());
+        user.setLastName(registerRequest.getLastName().trim());
         user.setPasswordHash(passwordEncoder.encode(registerRequest.getPassword()));
         userRepository.save(user);
 
