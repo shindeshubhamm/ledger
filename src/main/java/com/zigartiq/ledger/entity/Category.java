@@ -33,4 +33,23 @@ public class Category {
     @NotBlank
     private String icon;
 
+    public Category(String name, String color, String icon) {
+        this.name = name;
+        this.color = color;
+        this.icon = icon;
+    }
+
+    public Category(User user, Category category) {
+        this.user = user;
+        this.name = category.getName();
+        this.color = category.getColor();
+        this.icon = category.getIcon();
+    }
+
+    public Category(User user, String name, String color, String icon) {
+        this.user = user;
+        this.name = name;
+        this.color = color;
+        this.icon = icon;
+    }
 }

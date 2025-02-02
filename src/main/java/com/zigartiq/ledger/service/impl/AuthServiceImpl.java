@@ -1,13 +1,16 @@
 package com.zigartiq.ledger.service.impl;
 
+import com.zigartiq.ledger.entity.Category;
 import com.zigartiq.ledger.entity.User;
 import com.zigartiq.ledger.exception.LedgerApiException;
 import com.zigartiq.ledger.payload.request.LoginRequest;
 import com.zigartiq.ledger.payload.request.RegisterRequest;
 import com.zigartiq.ledger.payload.response.AuthResponse;
+import com.zigartiq.ledger.repository.CategoryRepository;
 import com.zigartiq.ledger.repository.UserRepository;
 import com.zigartiq.ledger.security.JWTService;
 import com.zigartiq.ledger.service.AuthService;
+import com.zigartiq.ledger.utils.Constants;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,6 +20,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -25,6 +30,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JWTService jwtService;
+    private final CategoryRepository categoryRepository;
 
     private String generateToken(String usernameOrEmail, String password) {
         Authentication authentication = authenticationManager.authenticate(
@@ -54,6 +60,12 @@ public class AuthServiceImpl implements AuthService {
         user.setLastName(registerRequest.getLastName().trim());
         user.setPasswordHash(passwordEncoder.encode(registerRequest.getPassword()));
         userRepository.save(user);
+
+        // Populate default categories for the new user
+        categoryRepository.saveAll(
+                Constants.DEFAULT_CATEGORIES.stream()
+                        .map(category -> new Category(user, category))
+                        .collect(Collectors.toList()));
 
         String token = generateToken(registerRequest.getUsername(), registerRequest.getPassword());
 
