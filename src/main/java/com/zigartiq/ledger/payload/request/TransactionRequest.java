@@ -1,4 +1,6 @@
-package com.zigartiq.ledger.payload.response;
+package com.zigartiq.ledger.payload.request;
+
+import com.zigartiq.ledger.utils.Constants.TransactionType;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -9,21 +11,17 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.Date;
 import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ExpenseResponse {
-    @NotBlank
-    private UUID id;
-
+public class TransactionRequest {
     @NotBlank
     private String name;
 
     @NotBlank
-    private String category;
+    private UUID categoryId;
 
     @NotBlank
     private String currency;
@@ -33,11 +31,10 @@ public class ExpenseResponse {
     private BigDecimal amount;
 
     @NotNull
+    private TransactionType type;
+
+    @NotNull
     private OffsetDateTime dateOfTransaction;
-
-    private Date createdAt;
-
-    private Date updatedAt;
 
     private String description;
 }

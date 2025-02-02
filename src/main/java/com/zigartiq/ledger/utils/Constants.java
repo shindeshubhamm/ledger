@@ -9,4 +9,8 @@ public class Constants {
             "/swagger-ui/**",
     };
 
+    public enum TransactionType {
+        INCOME,
+        EXPENSE
+    }
 }

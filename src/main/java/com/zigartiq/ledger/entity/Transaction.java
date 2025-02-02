@@ -1,5 +1,7 @@
 package com.zigartiq.ledger.entity;
 
+import com.zigartiq.ledger.utils.Constants.TransactionType;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,11 +15,11 @@ import java.util.Date;
 import java.util.UUID;
 
 @Entity
-@Table(name = "expenses")
+@Table(name = "transactions")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Expense {
+public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -29,14 +31,18 @@ public class Expense {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
-    private String category;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
 
     @Column(nullable = false)
     private String currency;
 
     @Column(nullable = false)
     private BigDecimal amount;
+
+    @Column(nullable = false)
+    private TransactionType type;
 
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -55,14 +61,15 @@ public class Expense {
     @Column
     private String description;
 
-    public Expense(User user, String name, String category, String currency, BigDecimal amount,
-            OffsetDateTime dateOfTransaction,
+    public Transaction(User user, String name, Category category, String currency, BigDecimal amount,
+            TransactionType type, OffsetDateTime dateOfTransaction,
             String description) {
         this.user = user;
         this.name = name;
         this.category = category;
         this.currency = currency;
         this.amount = amount;
+        this.type = type;
         this.dateOfTransaction = dateOfTransaction;
         this.description = description;
     }
